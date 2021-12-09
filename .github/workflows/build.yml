@@ -26,9 +26,7 @@ jobs:
         cache: "npm"
         node-version: ${{ matrix.node-version }}
     - run: npm install
-    - run: echo '::echo::on'
-    - run: dir
-    - run: node --version
+    - run: tools/build.bat release $(node --version)
     - uses: actions/upload-artifact@v2
       with:
         name: build
