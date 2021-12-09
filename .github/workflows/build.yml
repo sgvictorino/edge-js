@@ -29,6 +29,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm install
+    - run: npm install --global node-gyp
     - run: 'tools/build.bat release $($(node --version).TrimStart("v"))'
     - uses: actions/upload-artifact@v2
       with:
