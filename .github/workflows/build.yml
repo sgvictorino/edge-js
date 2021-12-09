@@ -31,8 +31,9 @@ jobs:
     - run: npm install
     - run: npm install --global node-gyp
     - run: 'tools/build.bat release $($(node --version).TrimStart("v"))'
+    - run: cd ..
     - uses: actions/upload-artifact@v2
       with:
         name: tree
-        path: .
+        path: edge-js
         if-no-files-found: error
