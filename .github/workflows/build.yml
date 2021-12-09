@@ -26,6 +26,8 @@ jobs:
         cache: "npm"
         node-version: ${{ matrix.node-version }}
     - run: npm install
+    - run: dir
+    - run: echo ${{ node --version }}
     - uses: actions/upload-artifact@v2
       with:
         name: build
