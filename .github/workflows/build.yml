@@ -14,7 +14,14 @@ jobs:
       matrix:
         node-version: [lts/*]
 
+    defaults:
+      run:
+        shell: msys2 {0}
+
     steps:
+    - uses: msys2/setup-msys2@v2
+      with:
+        update: true
     - uses: actions/checkout@v2
     - name: Setup dotnet
       uses: actions/setup-dotnet@v1
@@ -26,7 +33,7 @@ jobs:
         cache: "npm"
         node-version: ${{ matrix.node-version }}
     - run: npm install
-    - run: tools/build.bat release $(node --version)
+    - run: tools/build.bat release $(node --version | tail -c +2)
     - uses: actions/upload-artifact@v2
       with:
         name: build
