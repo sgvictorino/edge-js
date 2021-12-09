@@ -14,10 +14,11 @@ jobs:
       matrix:
         node-version: [lts/*]
 
+    defaults:
+      run:
+        shell: powershell
+
     steps:
-    - uses: msys2/setup-msys2@v2
-      with:
-        update: true
     - uses: actions/checkout@v2
     - name: Setup dotnet
       uses: actions/setup-dotnet@v1
@@ -28,7 +29,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm install
-    - run: msys2 -c 'tools/build.bat release $(node --version | tail -c +2)'
+    - run: 'tools/build.bat release $($(node --version).TrimStart("v"))'
     - uses: actions/upload-artifact@v2
       with:
         name: build
