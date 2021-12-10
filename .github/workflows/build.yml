@@ -31,8 +31,9 @@ jobs:
     - run: npm install
     - run: npm install --global node-gyp
     - run: tools/build.bat release $($(node --version).TrimStart("v"))
+    - run: Compress-Archive -LiteralPath lib\ -DestinationPath lib.zip
     - uses: actions/upload-artifact@v2
       with:
         name: lib
-        path: lib\
+        path: lib.zip
         if-no-files-found: error
