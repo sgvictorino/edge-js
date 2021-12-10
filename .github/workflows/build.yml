@@ -34,5 +34,5 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: lib
-        path: lib/
+        path: lib\
         if-no-files-found: error
