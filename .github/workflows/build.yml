@@ -12,9 +12,6 @@ jobs:
       matrix:
         node-version: [lts/*, 12, 14, 16]
 
-    concurrency: 
-      group: ${{ github.ref }}
-
     defaults:
       run:
         shell: powershell
