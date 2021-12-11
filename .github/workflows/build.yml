@@ -19,7 +19,6 @@ jobs:
         shell: powershell
 
     steps:
-    - run: echo $PSVersionTable
     - uses: actions/checkout@v2
     - name: Setup dotnet
       uses: actions/setup-dotnet@v1
@@ -32,7 +31,7 @@ jobs:
     - run: npm install
     - run: npm install --global node-gyp
     - name: Removing older ${{ matrix.node-version }} versions
-      run: Get-ChildItem lib\native\*\*\$($(node --version).TrimStart("v").Split("\.")[0])* | Remove-Item -Verbose -Force
+      run: Get-ChildItem lib\native\*\*\$($(node --version).TrimStart("v").Split("\.")[0])* | Remove-Item -Verbose -recurse
     - run: tools/build.bat release $($(node --version).TrimStart("v"))
     - uses: actions/upload-artifact@v2.2.4
       with:
