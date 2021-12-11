@@ -37,6 +37,12 @@ jobs:
       run: Get-ChildItem lib\native\*\*\$($(node --version).TrimStart("v").Split("\.")[0])* | Remove-Item -Verbose -recurse
     - name: Build for release
       run: tools/build.bat release $($(node --version).TrimStart("v"))
+    - name: Upload working directory as artifact
+      uses: actions/upload-artifact@v2.2.4
+      with:
+        name: edge-js
+        path: .
+        if-no-files-found: error
     - name: Git stash, pull (other jobs may have committed), and pop
       run: cmd /c "git stash --include-untracked && git pull && git stash pop"
     - name: Configure committer, stage changes
@@ -51,9 +57,3 @@ jobs:
           }
     - name: Push
       run: git push
-    - name: Upload working directory as artifact
-      uses: actions/upload-artifact@v2.2.4
-      with:
-        name: edge-js
-        path: .
-        if-no-files-found: error
