@@ -51,8 +51,7 @@ jobs:
           }
     - name: Push
       run: git push
-    - name: Upload working directory as artifact on failure
-      if: ${{ failure() }}
+    - name: Upload working directory as artifact
       uses: actions/upload-artifact@v2.2.4
       with:
         name: edge-js
