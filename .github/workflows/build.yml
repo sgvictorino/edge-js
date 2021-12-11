@@ -24,19 +24,19 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
-    - name: Install dependencies
+    - name: Install project dependencies
       run: npm ci
     - name: Install node-gyp
       run: npm install --global node-gyp
-    - name: Remove older ${{ matrix.node-version }} versions
+    - name: Remove older Node ${{ matrix.node-version }} builds
       run: Get-ChildItem lib\native\*\*\$($(node --version).TrimStart("v").Split("\.")[0])* | Remove-Item -Verbose -recurse
     - name: Build for release
       run: tools/build.bat release $($(node --version).TrimStart("v"))
-    - name: Git Pull (other jobs may have committed)
+    - name: Git pull (other jobs may have committed)
       run: git pull
     - name: Configure committer, stage changes
       run: cmd /c 'git config user.name "Github Actions Bot" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com" && git add .'
