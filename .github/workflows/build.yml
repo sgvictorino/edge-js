@@ -33,6 +33,8 @@ jobs:
     - name: Removing older ${{ matrix.node-version }} versions
       run: Get-ChildItem lib\native\*\*\$($(node --version).TrimStart("v").Split("\.")[0])* | Remove-Item -Verbose -recurse
     - run: tools/build.bat release $($(node --version).TrimStart("v"))
+    - name: Git Pull (other jobs may have committed)
+      run: git pull
     - name: Configure git, stage changes
       run: cmd /c 'git config user.name "Github Actions Bot" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com" && git add .'
     - name: Commit
