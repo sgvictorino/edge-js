@@ -19,6 +19,7 @@ jobs:
         shell: powershell
 
     steps:
+    - run: echo $PSVersionTable
     - uses: actions/checkout@v2
     - name: Setup dotnet
       uses: actions/setup-dotnet@v1
