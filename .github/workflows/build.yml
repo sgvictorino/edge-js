@@ -3,8 +3,6 @@ name: Build
 on:
   push:
     branches: [ master, actions-wip ]
-  pull_request:
-    branches: [ master ]
 
 jobs:
   build:
@@ -42,5 +40,11 @@ jobs:
       run: cmd /c 'git config user.name "Github Actions Bot" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com" && git add .'
     - name: Commit
       run: git commit -m "updated to $(node --version)"
+    - name: Ensure changes were only made to lib/
+      run: |
+          if (-not ([string]::IsNullOrEmpty((git diff --name-only HEAD HEAD~1 | Select-String "(^lib/" -NotMatch)))) {
+            git diff --stat HEAD HEAD~1
+            throw "Changes were made outside lib/, aborting!"
+          }
     - name: Push
       run: git push
