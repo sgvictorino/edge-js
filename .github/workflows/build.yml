@@ -30,6 +30,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm install
     - run: npm install --global node-gyp
+    - name: Removing older ${{ matrix.node-version }} versions
+      run: Get-ChildItem lib\native\*\*\$($(node --version).TrimStart("v").Split("\.")[0])* | Remove-Item -Verbose
     - run: tools/build.bat release $($(node --version).TrimStart("v"))
     - run: Compress-Archive -LiteralPath lib\ -DestinationPath lib.zip
     - uses: actions/upload-artifact@v2
