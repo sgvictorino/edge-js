@@ -33,9 +33,8 @@ jobs:
     - name: Removing older ${{ matrix.node-version }} versions
       run: Get-ChildItem lib\native\*\*\$($(node --version).TrimStart("v").Split("\.")[0])* | Remove-Item -Verbose -Force
     - run: tools/build.bat release $($(node --version).TrimStart("v"))
-    - run: Compress-Archive -LiteralPath lib\ -DestinationPath lib.zip
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v2.2.4
       with:
         name: lib
-        path: lib.zip
+        path: lib/
         if-no-files-found: error
