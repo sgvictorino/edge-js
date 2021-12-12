@@ -11,13 +11,11 @@ jobs:
     strategy:
       matrix:
         node-version: [lts/*, 12, 14, 16]
+      max-parallel: 1
 
     defaults:
       run:
         shell: powershell
-
-    concurrency: 
-      group: ${{ github.ref }}
     
     steps:
     - uses: actions/checkout@v2
