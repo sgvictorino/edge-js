@@ -2,11 +2,7 @@ name: Build
 
 on:
   push:
-    branches: [ master, actions-wip ]
-
-
-concurrency: 
-  group: ${{ github.ref }}    
+    branches: [ master, actions-wip ]  
 
 jobs:
   build:
@@ -20,6 +16,9 @@ jobs:
       run:
         shell: powershell
 
+    concurrency: 
+      group: ${{ github.ref }}
+    
     steps:
     - uses: actions/checkout@v2
     - name: Setup dotnet
