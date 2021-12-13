@@ -38,7 +38,7 @@ jobs:
     - name: Upload working directory as artifact
       uses: actions/upload-artifact@v2.2.4
       with:
-        name: edge-js-%{{ matrix.node-version }}
+        name: edge-js-${{ matrix.node-version }}
         path: .
         if-no-files-found: error
     - name: Git stash, pull (other jobs may have committed), and pop
