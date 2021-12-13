@@ -31,14 +31,15 @@ jobs:
       run: npm ci
     - name: Install node-gyp
       run: npm install --global node-gyp
+    - run: Set-Variable -Name "NODE_VERSION_STRING" -Value $(node --version)
     - name: Remove older Node ${{ matrix.node-version }} builds
-      run: Get-ChildItem lib\native\*\*\$($(node --version).TrimStart("v").Split("\.")[0])* | Remove-Item -Verbose -recurse
+      run: Get-ChildItem lib\native\*\*\$($NODE_VERSION_STRING.TrimStart("v").Split("\.")[0])* | Remove-Item -Verbose -recurse
     - name: Build for release
-      run: tools/build.bat release $($(node --version).TrimStart("v"))
+      run: tools/build.bat release $($NODE_VERSION_STRING.TrimStart("v"))
     - name: Upload working directory as artifact
       uses: actions/upload-artifact@v2.2.4
       with:
-        name: edge-js-${{ matrix.node-version }}
+        name: edge-js-node-${{ env.NODE_VERSION_STRING }}
         path: .
         if-no-files-found: error
     - name: Git stash, pull (other jobs may have committed), and pop
