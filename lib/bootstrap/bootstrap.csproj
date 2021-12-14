@@ -5,6 +5,7 @@
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <AssemblyName>bootstrap</AssemblyName>
     <PackageId>bootstrap</PackageId>
+    <Deterministic>True</Deterministic>
   </PropertyGroup>
 
   <ItemGroup >
