@@ -24,7 +24,6 @@ build
 
 bin/
 obj/
-!*.AssemblyReference.cache
 *.user
 *.suo
 packages/*
@@ -74,3 +73,5 @@ tools/*.zip
 tools/nuget.exe
 
 test-results*.*
+
+!*.AssemblyReference.cache
