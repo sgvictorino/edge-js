@@ -42,8 +42,6 @@ jobs:
         name: edge-js-node-${{ env.NODE_VERSION_STRING }}
         path: .
         if-no-files-found: error
-    - name: Git stash, pull (other jobs may have committed), and pop
-      run: cmd /c "git stash --include-untracked && git pull --rebase && git stash pop"
     - name: Configure committer, stage changes
       run: cmd /c 'git config user.name "Github Actions Bot" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com" && git add .'
     - name: Commit
