@@ -38,7 +38,6 @@ jobs:
       run: Get-ChildItem lib\native\*\*\$($(node --version).TrimStart("v").Split("\.")[0])* | Remove-Item -Verbose -recurse
     - name: Build for release
       run: tools/build.bat release $($(node --version).TrimStart("v"))
-    - run: npm run test
     - name: Upload working directory as artifact
       uses: actions/upload-artifact@v2.2.4
       with:
