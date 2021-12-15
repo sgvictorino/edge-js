@@ -50,6 +50,7 @@ jobs:
         if-no-files-found: error
     - name: Configure committer, stage changes
       run: cmd /c 'git config user.name "Github Actions Bot" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com" && git add .'
+    - run: git diff --name-only
     - name: Commit
       run: git commit -m "update to $(node --version)"
     - name: Ensure changes were only made to lib/
