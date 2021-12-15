@@ -54,9 +54,9 @@ jobs:
       run: git commit -m "update to $(node --version)"
     - name: Ensure changes were only made to lib/
       run: |
-          if (-not ([string]::IsNullOrEmpty((git diff --name-only HEAD HEAD~1 | Select-String "(^lib\/)|(\.AssemblyReference\.cache$)" -NotMatch)))) {
+          if (-not ([string]::IsNullOrEmpty((git diff --name-only HEAD HEAD~1 | Select-String "(^lib\/)|(\/obj\/)" -NotMatch)))) {
             git diff --stat HEAD HEAD~1
-            throw "Changes were made outside lib/, aborting!"
+            throw "Changes were made outside lib/ and obj/, aborting!"
           }
     - name: Push
       run: git push
