@@ -48,15 +48,14 @@ jobs:
         name: edge-js-node-${{ env.NODE_VERSION_STRING }}
         path: .
         if-no-files-found: error
+    - run: git status -u --porcelain
     - name: Configure committer, stage changes
       run: cmd /c 'git config user.name "Github Actions Bot" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com" && git add .'
     - name: Commit
       run: git commit -m "update to $(node --version)"
     - name: Ensure changes were only made to lib/
       run: |
-          git diff --name-only HEAD HEAD~1
           if (-not ([string]::IsNullOrEmpty((git diff --name-only HEAD HEAD~1 | Select-String "(^lib\/)|(\/obj\/)" -NotMatch)))) {
-            git diff --stat HEAD HEAD~1
             throw "Changes were made outside lib/ and obj/, aborting!"
           }
     - name: Push
