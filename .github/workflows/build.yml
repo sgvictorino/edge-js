@@ -53,7 +53,7 @@ jobs:
     - name: Configure committer, stage changes
       run: cmd /c 'git config user.name "Github Actions Bot" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com" && git add .'
     - name: Commit
-      run: git commit -m "update to $(node --version)"
+      run: git commit -m "update $(node --version) build"
     - name: Ensure changes were only made to lib/
       run: |
           if (-not ([string]::IsNullOrEmpty((git diff --name-only HEAD HEAD~1 | Select-String "(^lib\/)" -NotMatch)))) {
