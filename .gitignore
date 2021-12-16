@@ -23,6 +23,7 @@ npm-debug.log
 build
 
 bin/
+obj/
 *.user
 *.suo
 packages/*
