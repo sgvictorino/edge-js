@@ -52,9 +52,9 @@ jobs:
       run: cmd /c 'git config user.name "Github Actions Bot" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com" && git add .'
     - name: Commit
       run: git commit -m "update to $(node --version)"
+    - run: git status -u --porcelain
     - name: Ensure changes were only made to lib/
       run: |
-          git status -u --porcelain
           if (-not ([string]::IsNullOrEmpty((git diff --name-only HEAD HEAD~1 | Select-String "(^lib\/)" -NotMatch)))) {
             throw "Changes were made outside lib/ and obj/, aborting!"
           }
