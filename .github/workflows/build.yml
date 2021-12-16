@@ -55,7 +55,7 @@ jobs:
     - name: Ensure changes were only made to lib/
       run: |
           git status -u --porcelain
-          if (-not ([string]::IsNullOrEmpty((git diff --name-only HEAD HEAD~1 | Select-String "(^lib\/)|(\/obj\/)" -NotMatch)))) {
+          if (-not ([string]::IsNullOrEmpty((git diff --name-only HEAD HEAD~1 | Select-String "(^lib\/)" -NotMatch)))) {
             throw "Changes were made outside lib/ and obj/, aborting!"
           }
     - name: Push
