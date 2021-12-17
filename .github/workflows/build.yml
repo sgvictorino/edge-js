@@ -43,22 +43,26 @@ jobs:
       run: Get-ChildItem lib\native\*\*\$($(node --version).TrimStart("v").Split("\.")[0])* | Remove-Item -Verbose -recurse
     - name: Build for release
       run: tools/build.bat release $($(node --version).TrimStart("v"))
+    - name: List changed files
+      run: git status -u --porcelain
+    - name: Ensure changes were only made to lib/
+      run: |
+          if (-not ([string]::IsNullOrEmpty((git diff --name-only HEAD HEAD~1 | Select-String "(^lib\/)" -NotMatch)))) {
+            throw "Changes were made outside lib/, not pushing!"
+          }
+    - name: Hash build materials
+      run: bash -c "tar -cf /tmp/edge-js-build-materials $(find . -type f -regextype posix-egrep -regex '^\.\/((((src)|(lib\/bootstrap))\/.*)|(((binding\.gyp)|(EdgeJs\.sln))))$') && shasum -a 1 /tmp/build-materials >> last-native-module-build-materials.txt"
+    - name: Check if build materials changed
+      run: git diff --exit-code last-native-module-build-materials.txt && echo "BUILD_MATERIALS_CHANGED=true" | Out-File -FilePath $Env:GITHUB_ENV -Append
     - name: Upload working directory as artifact
       uses: actions/upload-artifact@v2.2.4
       with:
         name: edge-js-node-${{ env.NODE_VERSION_STRING }}
         path: .
         if-no-files-found: error
-    - name: List changed files
-      run: git status -u --porcelain
     - name: Configure committer, stage changes
       run: cmd /c 'git config user.name "Github Actions Bot" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com" && git add .'
     - name: Commit
       run: git commit -m "update $(node --version) build"
-    - name: Ensure changes were only made to lib/
-      run: |
-          if (-not ([string]::IsNullOrEmpty((git diff --name-only HEAD HEAD~1 | Select-String "(^lib\/)" -NotMatch)))) {
-            throw "Changes were made outside lib/, not pushing!"
-          }
     - name: Push
       run: git push
