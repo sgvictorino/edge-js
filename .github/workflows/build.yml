@@ -45,8 +45,10 @@ jobs:
       run: tools/build.bat release $($(node --version).TrimStart("v"))
     - name: List changed files
       run: git status -u --porcelain
+    - name: Archive build materials
+      run: bash -c "tar -cf /tmp/edge-js-build-materials $(find . -type f -regextype posix-egrep -regex '^\.\/((((src)|(lib\/bootstrap))\/.*)|(((binding\.gyp)|(EdgeJs\.sln))))$')"
     - name: Hash build materials
-      run: bash -c "tar -cf /tmp/edge-js-build-materials $(find . -type f -regextype posix-egrep -regex '^\.\/((((src)|(lib\/bootstrap))\/.*)|(((binding\.gyp)|(EdgeJs\.sln))))$') && shasum -a 1 /tmp/build-materials >> lib/native/last-native-module-build-materials.txt"
+      run: bash -c "shasum -a 1 /tmp/build-materials >> lib/native/last-native-module-build-materials.txt"
     - name: Check if build materials changed
       run: git diff --exit-code lib\native\last-native-module-build-materials.txt && echo "BUILD_MATERIALS_CHANGED=true" | Out-File -FilePath $Env:GITHUB_ENV -Append
     - name: Upload working directory as artifact
