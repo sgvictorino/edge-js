@@ -23,8 +23,6 @@ jobs:
     
     steps:
     - uses: msys2/setup-msys2@v2
-      with:
-       install: binutils
     - uses: actions/checkout@v2
       with:
         ref: ${{ github.ref }}
@@ -45,8 +43,6 @@ jobs:
       run: Get-ChildItem lib\native\*\*\$($(node --version).TrimStart("v").Split("\.")[0])* | Remove-Item -Verbose -recurse
     - name: Build for release
       run: tools/build.bat release $($(node --version).TrimStart("v"))
-    - name: Strip .node binaries
-      run: bash -c "strip lib/native/*/*/*/*.node"
     - name: Upload working directory as artifact
       uses: actions/upload-artifact@v2.2.4
       with:
