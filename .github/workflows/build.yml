@@ -46,7 +46,7 @@ jobs:
     - name: List changed files
       run: git status -u --porcelain
     - name: Archive build materials
-      run: bash -c "tar -cf /tmp/edge-js-build-materials $(find . -type f -regextype posix-egrep -regex '^\.\/((((src)|(lib\/bootstrap))\/.*)|(((binding\.gyp)|(EdgeJs\.sln))))$')"
+      run: bash -c "tar -cf /tmp/edge-js-build-materials `$(find . -type f -regextype posix-egrep -regex '^\.\/((((src)|(lib\/bootstrap))\/.*)|(((binding\.gyp)|(EdgeJs\.sln))))$')"
     - name: Hash build materials
       run: bash -c "shasum -a 1 /tmp/build-materials >> lib/native/last-native-module-build-materials.txt"
     - name: Check if build materials changed
