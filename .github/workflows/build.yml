@@ -40,7 +40,7 @@ jobs:
       run: npm install --global node-gyp
     - run: echo "NODE_VERSION_STRING=$(node --version)" | Out-File -FilePath $Env:GITHUB_ENV -Append
     - name: Remove older Node ${{ matrix.node-version }} builds
-      run: Get-ChildItem lib\native\*\*\$($(node --version).TrimStart("v").Split("\.")[0])* | Remove-Item -Verbose -recurse
+      run: Get-ChildItem lib\native\win32\*\$($(node --version).TrimStart("v").Split("\.")[0])* | Remove-Item -Verbose -recurse
     - name: Build for release
       run: tools/build.bat release $($(node --version).TrimStart("v"))
     - name: List changed files
