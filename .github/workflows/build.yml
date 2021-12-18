@@ -50,7 +50,10 @@ jobs:
     - name: Hash build materials
       run: msys2 -c "shasum -a 1 /tmp/edge-js-build-materials >> lib/native/last-native-module-build-materials.txt"
     - name: Check if build materials changed
-      run: git diff --exit-code lib\native\last-native-module-build-materials.txt && echo "BUILD_MATERIALS_CHANGED=true" | Out-File -FilePath $Env:GITHUB_ENV -Append
+      run: |
+          if (git diff --exit-code lib\native\last-native-module-build-materials.txt) {
+            echo "BUILD_MATERIALS_CHANGED=true" | Out-File -FilePath $Env:GITHUB_ENV -Append
+          }
     - name: Upload working directory as artifact
       uses: actions/upload-artifact@v2.2.4
       with:
