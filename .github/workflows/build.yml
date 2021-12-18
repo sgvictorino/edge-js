@@ -67,7 +67,8 @@ jobs:
         name: edge-js-node-${{ env.NODE_VERSION_STRING }}
         path: .
         if-no-files-found: error
-    - run: msys2 -c "EDGE_USE_CORECLR=1 npm run test"
+    - name: npm run test
+      run: $env:EDGE_USE_CORECLR=1; npm run test
     - name: Configure committer, stage changes
       run: cmd /c 'git config user.name "Github Actions Bot" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com" && git add .'
     - name: Commit
