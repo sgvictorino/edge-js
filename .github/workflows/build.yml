@@ -47,13 +47,13 @@ jobs:
             }
           }
     - name: Remove past Node ${{ matrix.node-version }} builds
-      run: Get-ChildItem lib\native\win32\*\$($(node --version).TrimStart("v").Split("\.")[0])* | Remove-Item -Verbose -recurse
+      run: Get-ChildItem lib\native\win32\*\$((node --version).TrimStart("v").Split("\.")[0])* | Remove-Item -Verbose -recurse
     - name: Build for release
-      run: tools/build.bat release $($(node --version).TrimStart("v"))
+      run: tools/build.bat release $(node --version).TrimStart("v")
     - name: List changed files
       run: git status -u --porcelain
     - name: Archive build materials
-      run: msys2 -c "tar -cf /tmp/edge-js-build-materials `$(find . -type f -regextype posix-egrep -regex '^\.\/((((src)|(lib\/bootstrap))\/.*)|(((binding\.gyp)|(EdgeJs\.sln))))$')"
+      run: msys2 -c "tar -cf /tmp/edge-js-build-materials `$(find . -type f -regextype posix-egrep -regex '^\.\/((src|lib\/bootstrap)\/.*|(binding\.gyp|EdgeJs\.sln))$')"
     - name: Hash build materials
       run: msys2 -c "shasum -a 1 /tmp/edge-js-build-materials >> lib/native/last-native-module-build-materials.txt"
     - name: Check if build materials changed
@@ -74,7 +74,7 @@ jobs:
       run: git commit -m "update $(node --version) build"
     - name: Ensure changes were only made to lib/ or the saved build materials hash
       run: |
-          if (-not ([string]::IsNullOrEmpty((git diff --name-only HEAD HEAD~1 | Select-String "(^lib\/)" -NotMatch)))) {
+          if (-not [string]::IsNullOrEmpty((git diff --name-only HEAD HEAD~1 | Select-String "^lib\/" -NotMatch))) {
             throw "Changes were made outside lib/, not pushing!"
           }
     - name: Push
