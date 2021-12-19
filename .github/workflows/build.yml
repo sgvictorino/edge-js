@@ -1,5 +1,6 @@
 name: Build
 
+
 on:
   push:
     branches: [ master, actions-wip ]  
@@ -11,6 +12,9 @@ concurrency:
 jobs:
   build:
     runs-on: windows-latest
+
+    env:
+      SKIP_ARTIFACT_UPLOAD: ${{ secrets.SKIP_ARTIFACT_UPLOAD }}
 
     strategy:
       matrix:
@@ -63,7 +67,7 @@ jobs:
           }
     - name: Upload working directory as artifact
       uses: actions/upload-artifact@v2.2.4
-      if: ${{ secrets.SKIP_ARTIFACT_UPLOAD != "true" }}
+      if: ${{ env.SKIP_ARTIFACT_UPLOAD != "true" }}
       with:
         name: edge-js-node-${{ env.NODE_VERSION_STRING }}
         path: .
