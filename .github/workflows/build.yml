@@ -67,7 +67,7 @@ jobs:
           }
     - name: Upload working directory as artifact
       uses: actions/upload-artifact@v2.2.4
-      if: ${{ env.SKIP_ARTIFACT_UPLOAD != "true" }}
+      if: ${{ env.SKIP_ARTIFACT_UPLOAD }} != "true"
       with:
         name: edge-js-node-${{ env.NODE_VERSION_STRING }}
         path: .
