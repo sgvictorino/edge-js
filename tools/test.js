@@ -64,9 +64,7 @@ function runOnSuccess(code, signal) {
 		process.env['EDGE_APP_ROOT'] = path.join(testDir, 'bin', 'Debug', 'netcoreapp1.1');
 		spawn('node', [mocha, testDir, '-R', 'spec', '-t', '10000', '-gc'], { 
 			stdio: 'inherit' 
-		}).on('error', function(err) {
-			exitWithErrors([err]);
-		});
+		}).on('close', exitOnError);
 	} else {
 		process.exit(code);
 	}
