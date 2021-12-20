@@ -67,6 +67,7 @@ function runOnSuccess(code, signal) {
 		}).on('error', function(err) {
 			exitWithErrors([err]);
 		});
+	} else {
+		process.exit(code);
 	}
-	process.exit(code);
 }
