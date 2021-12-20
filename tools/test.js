@@ -27,6 +27,11 @@ else {
     });
 }
 
+function exitWithErrors(errors) {
+    errors.forEach(err => console.error(err));
+    process.exit(1);
+}
+
 function run(cmd, args, onClose){
 
 	var params = process.env.EDGE_USE_CORECLR ? {cwd: testDir} : {};
@@ -41,9 +46,7 @@ function run(cmd, args, onClose){
     });
 
     command.on('error', function(err) {
-        console.error(error);
-        console.error(err);
-        process.exit(1);
+        exitWithErrors([error, err]);
     });
 
     command.on('close', function(code){
@@ -58,7 +61,7 @@ function runOnSuccess(code, signal) {
 		spawn('node', [mocha, testDir, '-R', 'spec', '-t', '10000', '-gc'], { 
 			stdio: 'inherit' 
 		}).on('error', function(err) {
-			console.log(err); 
+			exitWithErrors([error, err]);
 		});
 	}
 }
