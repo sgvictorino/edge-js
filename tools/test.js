@@ -41,8 +41,9 @@ function run(cmd, args, onClose){
     });
 
     command.on('error', function(err) {
-        console.log(error);
-        console.log(err);
+        console.error(error);
+        console.error(err);
+        process.exit(1);
     });
 
     command.on('close', function(code){
