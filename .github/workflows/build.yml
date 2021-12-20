@@ -27,6 +27,15 @@ jobs:
     - uses: actions/checkout@v2
       with:
         ref: ${{ github.ref }}
+    - name: Archive build materials
+      run: msys2 -c "tar -cf /tmp/edge-js-build-materials `$(find . -type f -regextype posix-egrep -regex '^\.\/((src|lib\/bootstrap)\/.*|(binding\.gyp|EdgeJs\.sln))$')"
+    - name: Hash build materials
+      run: msys2 -c "shasum -a 1 /tmp/edge-js-build-materials | awk '{ print $1 }' > lib/native/last-native-module-build-materials.txt"
+    - name: Check if build materials changed
+      run: |
+          if (git diff --name-only | Select-String "^lib/native/last-native-module-build-materials.txt$") {
+            echo "BUILD_MATERIALS_CHANGED=true" | Out-File -FilePath $Env:GITHUB_ENV -Append
+          }
     - name: Setup dotnet
       uses: actions/setup-dotnet@v1
       with:
@@ -53,15 +62,6 @@ jobs:
       run: tools/build.bat release $(node --version).TrimStart("v")
     - name: List changed files
       run: git status -u --porcelain
-    - name: Archive build materials
-      run: msys2 -c "tar -cf /tmp/edge-js-build-materials `$(find . -type f -regextype posix-egrep -regex '^\.\/((src|lib\/bootstrap)\/.*|(binding\.gyp|EdgeJs\.sln))$')"
-    - name: Hash build materials
-      run: msys2 -c "shasum -a 1 /tmp/edge-js-build-materials | awk '{ print $1 }' > lib/native/last-native-module-build-materials.txt"
-    - name: Check if build materials changed
-      run: |
-          if (git diff --name-only | Select-String "^lib/native/last-native-module-build-materials.txt$") {
-            echo "BUILD_MATERIALS_CHANGED=true" | Out-File -FilePath $Env:GITHUB_ENV -Append
-          }
     - name: Upload working directory as artifact
       uses: actions/upload-artifact@v2.2.4
       with:
@@ -74,6 +74,8 @@ jobs:
       run: cmd /c 'git config user.name "Github Actions Bot" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com" && git add .'
     - name: Commit
       run: git commit -m "build Node $(node --version) module"
+    - name: List committed changes
+      run: git diff --name-only HEAD HEAD~1
     - name: Ensure changes were only made to lib/ or the saved build materials hash
       run: |
           if (-not [string]::IsNullOrEmpty((git diff --name-only HEAD HEAD~1 | Select-String "^lib\/" -NotMatch))) {
