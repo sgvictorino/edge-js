@@ -28,7 +28,7 @@ jobs:
       with:
         ref: ${{ github.ref }}
     - name: Archive build materials
-      run: msys2 -c "tar -cf /tmp/edge-js-build-materials `$(find . -type f -regextype posix-egrep -regex '^\.\/((src|lib\/bootstrap)\/.*|(binding\.gyp|EdgeJs\.sln))$')"
+      run: msys2 -c "tar -cf /tmp/edge-js-build-materials --exclude-vcs-ignores `$(find . -type f -regextype posix-egrep -regex '^\.\/((src|lib\/bootstrap)\/.*|(binding\.gyp|EdgeJs\.sln))$')"
     - name: Hash build materials
       run: msys2 -c "shasum -a 1 /tmp/edge-js-build-materials | awk '{ print $1 }' > lib/native/last-native-module-build-materials.txt"
     - name: Check if build materials changed
