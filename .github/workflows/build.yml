@@ -83,5 +83,5 @@ jobs:
             throw "Changes were made outside lib/, not pushing!"
           }
     - name: Push
-      if: ${{ env.BUILD_MATERIALS_CHANGED }} == true
+      if: ${{ env.BUILD_MATERIALS_CHANGED }} || ${{ env.NEW_NODE_BUILD }} == true
       run: git push
