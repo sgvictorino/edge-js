@@ -1,0 +1,42 @@
+name: Test
+
+on: [push, pull_request]
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        node-version: [lts/*, 18, 20]
+        os: [windows-2022, ubuntu-latest]
+
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.ref }}
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v1
+    - name: Setup csc.exe
+      uses: yoavain/Setup-CSC@v5
+      if: ${{ runner.os == 'Windows' }}
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Install
+      run: npm i
+    - name: Test (.NET Core)
+      run: EDGE_USE_CORECLR=1 npm run test
+    - name: Test (.NET Framework)
+      run: npm run test
+      if: ${{ runner.os == 'Windows' }}
