@@ -54,7 +54,8 @@
     "url": "http://github.com/agracio/edge-js/issues"
   },
   "scripts": {
-    "install": "node tools/install.js",
+    "install": "cd lib/bootstrap && dotnet restore && dotnet build --configuration Release && cd ../.. && npm run build-native",
+    "build-native": "node-gyp configure && node-gyp build -release",
     "test": "node tools/test.js"
   }
 }
